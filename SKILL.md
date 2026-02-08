@@ -342,13 +342,15 @@ Count each group's entries carefully — header count must exactly match row cou
 
 Based on the N tweets above:
 
-1. **Hot angles**: [2-3 angles getting the most likes/RTs]
-2. **Content gaps**: [angles with engagement but few posts — underserved demand]
-3. **Recommended format**: [thread / single / hot-take based on what's performing]
-4. **Top KOLs**: [5 accounts with the most engagement on this topic]
-5. **Hook patterns**: [common first-line patterns from top-performing pure text posts]
-6. **Conversation drivers**: [questions/takes that generate the most replies]
+1. **Hot angles**: [2-3 angles getting the most likes/RTs — cite top posts as: @handle — "first 60 chars of tweet text" ([link](tweet_url))]
+2. **Content gaps**: [angles with engagement but few posts — underserved demand — cite examples as: @handle — "first 60 chars" ([link](tweet_url))]
+3. **Recommended format**: [thread / single / hot-take based on what's performing — cite top-performing examples as: @handle — "first 60 chars" ([link](tweet_url))]
+4. **Top KOLs**: [5 accounts with the most engagement — each as: @handle — "first 60 chars" ([link](tweet_url)) (likes)]
+5. **Hook patterns**: [common first-line patterns — cite examples as: @handle — "first 60 chars" ([link](tweet_url))]
+6. **Conversation drivers**: [questions/takes that generate the most replies — cite as: @handle — "first 60 chars" ([link](tweet_url))]
 7. **Avoid**: [overdone angles with declining engagement]
+
+> **Rule**: Every reference to a specific tweet MUST use the three-part format: `@handle — "tweet text excerpt" ([link](tweet_url))` — showing the username, the reference post content, and a clickable link separately.
 ```
 
 ---
