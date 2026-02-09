@@ -1,3 +1,15 @@
+<div align="center">
+  <a href="https://github.com/mindfold-ai/Trellis">
+    <img src=".github/trellis-banner.png" width="600" alt="Trellis">
+  </a>
+  <p>
+    This skill is built with <a href="https://github.com/mindfold-ai/Trellis"><b>Trellis</b></a> — an all-in-one AI framework & toolkit for Claude Code, Cursor & iFlow.<br>
+    <a href="https://github.com/mindfold-ai/Trellis">Try it out here</a>
+  </p>
+</div>
+
+---
+
 # x-collect
 
 [![npm version](https://img.shields.io/npm/v/x-collect-skill)](https://www.npmjs.com/package/x-collect-skill)

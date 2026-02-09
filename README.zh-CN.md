@@ -1,3 +1,15 @@
+<div align="center">
+  <a href="https://github.com/mindfold-ai/Trellis">
+    <img src=".github/trellis-banner.png" width="600" alt="Trellis">
+  </a>
+  <p>
+    本 Skill 由 <a href="https://github.com/mindfold-ai/Trellis"><b>Trellis</b></a> 构建 — Claude Code、Cursor 与 iFlow 的一站式 AI 框架与工具集。<br>
+    <a href="https://github.com/mindfold-ai/Trellis">立即体验</a>
+  </p>
+</div>
+
+---
+
 # x-collect
 
 [![npm version](https://img.shields.io/npm/v/x-collect-skill)](https://www.npmjs.com/package/x-collect-skill)
