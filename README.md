@@ -36,10 +36,11 @@ claude mcp add --scope user playwright -- npx @playwright/mcp@latest
 
 ## Install
 
-### Option A: npx skills (Recommended)
+### Option A: Claude Plugin Marketplace (Recommended)
 
 ```bash
-npx skills add SamCuipogobongo/x-collect
+claude plugin marketplace add SamCuipogobongo/x-collect
+claude plugin install x-collect
 ```
 
 ### Option B: npm global install
