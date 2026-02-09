@@ -2,6 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/x-collect-skill)](https://www.npmjs.com/package/x-collect-skill)
 [![license](https://img.shields.io/npm/l/x-collect-skill)](./LICENSE)
+[![Discord](https://img.shields.io/discord/1338058872492eback?label=Discord&logo=discord&logoColor=white)](https://discord.gg/tjCB6tVPAm)
 
 [English](./README.md) | 中文
 
@@ -125,6 +126,10 @@ cp x-collect/SKILL.md ~/.claude/skills/x-collect/
 5. 输出 JSONL + Markdown，附带内容机会分析
 
 无需第三方 API，直接通过 Playwright 浏览器自动化读取 x.com。
+
+## 社区
+
+问题、反馈或功能建议？加入我们的 [Discord](https://discord.gg/tjCB6tVPAm)。
 
 ## License
 

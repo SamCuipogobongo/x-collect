@@ -2,6 +2,7 @@
 
 [![npm version](https://img.shields.io/npm/v/x-collect-skill)](https://www.npmjs.com/package/x-collect-skill)
 [![license](https://img.shields.io/npm/l/x-collect-skill)](./LICENSE)
+[![Discord](https://img.shields.io/discord/1338058872492eback?label=Discord&logo=discord&logoColor=white)](https://discord.gg/tjCB6tVPAm)
 
 English | [中文](./README.zh-CN.md)
 
@@ -125,6 +126,10 @@ The skill uses Playwright MCP to:
 5. Output JSONL + Markdown with Content Opportunity Summary
 
 No third-party API needed — reads directly from x.com via Playwright browser automation.
+
+## Community
+
+Questions, feedback, or feature requests? Join our [Discord](https://discord.gg/tjCB6tVPAm).
 
 ## License
 
