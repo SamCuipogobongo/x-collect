@@ -17,7 +17,7 @@
   },
   "license": "MIT",
   "bin": {
-    "x-collect-install": "./bin/install.js"
+    "x-collect-install": "bin/install.js"
   },
   "files": [
     "SKILL.md",
