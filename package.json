@@ -1,0 +1,31 @@
+{
+  "name": "x-collect-skill",
+  "version": "1.0.0",
+  "description": "X/Twitter topic intelligence skill for Claude Code",
+  "keywords": [
+    "claude-code",
+    "claude-skill",
+    "agent-skill",
+    "twitter",
+    "x-com",
+    "playwright"
+  ],
+  "homepage": "https://github.com/SamCuipogobongo/x-collect",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SamCuipogobongo/x-collect.git"
+  },
+  "license": "MIT",
+  "bin": {
+    "x-collect-install": "./bin/install.js"
+  },
+  "files": [
+    "SKILL.md",
+    "bin/",
+    "LICENSE",
+    "README.md"
+  ],
+  "scripts": {
+    "postinstall": "node bin/install.js"
+  }
+}

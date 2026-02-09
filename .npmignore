@@ -1,0 +1,7 @@
+x-collect-data/
+.git/
+.github/
+.claude-plugin/
+.DS_Store
+.gitignore
+install.sh

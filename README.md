@@ -1,44 +1,66 @@
 # x-collect
 
-X/Twitter topic intelligence tool for Claude Code. Uses browser automation to search x.com directly, scraping real tweets with engagement metrics.
+[![npm version](https://img.shields.io/npm/v/x-collect-skill)](https://www.npmjs.com/package/x-collect-skill)
+[![license](https://img.shields.io/npm/l/x-collect-skill)](./LICENSE)
+
+X/Twitter topic intelligence skill for Claude Code. Uses Playwright browser automation to search x.com directly, scraping real tweets with engagement metrics.
 
 ## What it does
 
 `/x-collect [topic]` opens x.com in Chrome, runs 3 search rounds, and extracts real tweet data:
 
 1. **Top / Viral Posts** — x.com search "Top" tab, most popular tweets
-2. **Trending / Recent Posts** — x.com search "Latest" tab, real-time discussion
+2. **Trending / Recent Posts** — Top tab with `min_faves:50 since:YESTERDAY`, hottest posts from the last 24h
 3. **KOL Posts** — filtered by `min_faves:100`, high-engagement accounts only
 
+Optional bonus rounds:
+
+4. **Hook Study** — pure text posts (`-filter:media -filter:links`) with 500+ likes, for studying copy patterns
+5. **Conversation Starters** — high-reply posts (`min_replies:30`), to find what drives discussion
+
 Output: JSONL + Markdown in `./x-collect-data/` with real handles, tweet text, likes, retweets, replies, views, and a Content Opportunity Summary.
-
-## Install
-
-### Option A: One-line install
-
-```bash
-curl -fsSL https://raw.githubusercontent.com/anthropics/x-collect-skill/main/install.sh | bash
-```
-
-### Option B: Manual
-
-```bash
-git clone https://github.com/anthropics/x-collect-skill.git
-mkdir -p ~/.claude/skills/x-collect
-cp x-collect-skill/SKILL.md ~/.claude/skills/x-collect/
-```
-
-### Option C: Copy SKILL.md directly
-
-Download `SKILL.md` and place it at `~/.claude/skills/x-collect/SKILL.md`.
 
 ## Prerequisites
 
 | Dependency | Purpose | Required |
 |------------|---------|----------|
 | [Claude Code](https://claude.ai/claude-code) | Runtime | Yes |
-| [Playwright MCP](https://github.com/microsoft/playwright-mcp) | Browser automation (`npx @playwright/mcp@latest`) | Yes |
+| [Playwright MCP](https://github.com/microsoft/playwright-mcp) | Browser automation | Yes |
 | Logged-in X/Twitter session | Browser must have x.com logged in | Yes |
+
+### Install Playwright MCP
+
+```bash
+claude mcp add --scope user playwright -- npx @playwright/mcp@latest
+```
+
+## Install
+
+### Option A: npx skills (Recommended)
+
+```bash
+npx skills add SamCuipogobongo/x-collect
+```
+
+### Option B: npm global install
+
+```bash
+npm install -g x-collect-skill
+```
+
+### Option C: One-line install
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/SamCuipogobongo/x-collect/main/install.sh | bash
+```
+
+### Option D: Manual
+
+```bash
+git clone https://github.com/SamCuipogobongo/x-collect.git
+mkdir -p ~/.claude/skills/x-collect
+cp x-collect/SKILL.md ~/.claude/skills/x-collect/
+```
 
 ## Usage
 
@@ -85,25 +107,21 @@ Data saved to `./x-collect-data/`:
 | Type | Source |
 |------|--------|
 | `viral_post` | x.com search "Top" tab |
-| `trending_post` | x.com search "Latest" tab |
+| `trending_post` | Top tab with `min_faves:50 since:YESTERDAY` |
 | `kol_post` | x.com search with `min_faves:100` filter |
+| `hook_study` | Pure text posts (`-filter:media -filter:links`) with 500+ likes |
+| `conversation_starter` | High-reply posts (`min_replies:30`) |
 
 ## How it works
 
 The skill uses Playwright MCP to:
-1. Navigate to x.com search pages (Top, Latest, min_faves filter)
+1. Navigate to x.com search pages with Top tab and various filters
 2. Wait for tweets to load
 3. Extract tweet data via DOM queries or accessibility tree snapshot
 4. Deduplicate by tweet URL
 5. Output JSONL + Markdown with Content Opportunity Summary
 
 No third-party API needed — reads directly from x.com via Playwright browser automation.
-
-### Install Playwright MCP
-
-```bash
-claude mcp add --scope user playwright -- npx @playwright/mcp@latest
-```
 
 ## License
 
