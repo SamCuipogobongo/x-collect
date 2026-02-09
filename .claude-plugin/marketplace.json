@@ -1,0 +1,25 @@
+{
+  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
+  "name": "x-collect",
+  "version": "1.0.0",
+  "description": "X/Twitter topic intelligence via Playwright browser automation",
+  "owner": {
+    "name": "Sam"
+  },
+  "plugins": [
+    {
+      "name": "x-collect",
+      "description": "X/Twitter topic intelligence — scrapes real tweets, engagement metrics, and KOL accounts for content research",
+      "version": "1.0.0",
+      "author": {
+        "name": "Sam"
+      },
+      "source": "./",
+      "category": "productivity",
+      "keywords": ["twitter", "x-com", "intelligence", "playwright", "content-research"],
+      "homepage": "https://github.com/SamCuipogobongo/x-collect",
+      "repository": "https://github.com/SamCuipogobongo/x-collect",
+      "license": "MIT"
+    }
+  ]
+}
