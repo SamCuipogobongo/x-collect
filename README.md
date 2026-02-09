@@ -3,6 +3,8 @@
 [![npm version](https://img.shields.io/npm/v/x-collect-skill)](https://www.npmjs.com/package/x-collect-skill)
 [![license](https://img.shields.io/npm/l/x-collect-skill)](./LICENSE)
 
+English | [中文](./README.zh-CN.md)
+
 X/Twitter topic intelligence skill for Claude Code. Uses Playwright browser automation to search x.com directly, scraping real tweets with engagement metrics.
 
 ## What it does
