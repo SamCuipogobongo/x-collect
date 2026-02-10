@@ -1,6 +1,6 @@
 {
   "name": "x-collect-skill",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "X/Twitter topic intelligence skill for Claude Code",
   "keywords": [
     "claude-code",
