@@ -46,6 +46,8 @@ X/Twitter 话题情报采集工具，Claude Code 专用 Skill。通过 Actionboo
 
 ### 安装 Actionbook 扩展
 
+请先按照官方指南完成安装：**[Actionbook 安装指南](https://actionbook.dev/docs/guides/installation)**
+
 ```bash
 actionbook extension install           # 安装扩展文件
 # 然后在 Chrome 中加载未打包扩展 (chrome://extensions)

@@ -46,6 +46,8 @@ Output: JSONL + Markdown in `./x-collect-data/` with real handles, tweet text, l
 
 ### Setup Actionbook Extension
 
+Follow the official guide: **[Actionbook Installation](https://actionbook.dev/docs/guides/installation)**
+
 ```bash
 actionbook extension install           # install extension files
 # Then load unpacked extension in Chrome (chrome://extensions)
