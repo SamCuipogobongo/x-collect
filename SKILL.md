@@ -1,7 +1,7 @@
 ---
 name: x-collect
 description: |
-  X/Twitter topic intelligence tool. Uses Playwright browser automation to search
+  X/Twitter topic intelligence tool. Uses Actionbook browser automation to search
   x.com directly, scraping real tweets, engagement metrics, and KOL accounts.
   Outputs a structured intel report (JSONL + Markdown) with content opportunity analysis.
   Use when the user wants to research a topic on X/Twitter, find what's performing,
@@ -15,20 +15,11 @@ allowed-tools:
   - Glob
   - Grep
   - AskUserQuestion
-  - mcp__playwright__browser_navigate
-  - mcp__playwright__browser_snapshot
-  - mcp__playwright__browser_take_screenshot
-  - mcp__playwright__browser_run_code
-  - mcp__playwright__browser_click
-  - mcp__playwright__browser_type
-  - mcp__playwright__browser_wait_for
-  - mcp__playwright__browser_press_key
-  - mcp__playwright__browser_tabs
 ---
 
 # X Topic Intelligence
 
-Research what's trending and performing on X/Twitter for any topic. Browse x.com directly via Playwright browser automation to find real tweets, engagement data, and KOL accounts.
+Research what's trending and performing on X/Twitter for any topic. Browse x.com directly via Actionbook Extension mode (controlling the user's logged-in Chrome) to find real tweets, engagement data, and KOL accounts.
 
 ---
 
@@ -49,95 +40,87 @@ When no topic is provided, use `AskUserQuestion`:
 | Dependency | Purpose | Required |
 |------------|---------|----------|
 | Claude Code | Runtime | Yes |
-| Playwright MCP | Browser automation (`npx @playwright/mcp@latest`) | Yes |
-| Logged-in X/Twitter session | Browser must have an active x.com session | Yes |
+| Actionbook CLI | Browser automation (`actionbook` command) | Yes |
+| Actionbook Extension | Chrome extension + bridge for controlling user's browser | Yes |
+| Logged-in X/Twitter session | User's Chrome must have an active x.com session | Yes |
+
+### Pre-flight Check
+
+Before starting any round, verify the extension bridge is running:
+
+```bash
+actionbook extension ping
+```
+
+If not connected, inform the user:
+> "Actionbook extension bridge is not running. Please run `actionbook extension serve` in a terminal and ensure the Chrome extension is connected."
 
 ---
 
 ## Browser Automation Flow
 
-Use Playwright MCP tools to navigate x.com, perform searches, and extract tweet data.
+Use Actionbook Extension mode to control the user's Chrome browser, navigate x.com, perform searches, and extract tweet data.
 
 ### General Steps (repeat for each search round)
 
-1. **Navigate** — `browser_navigate` to the x.com search URL
-2. **Wait** — `browser_wait_for` until tweets appear (wait for text like "Like" or a few seconds)
-3. **Extract** — `browser_run_code` to run Playwright JS that scrapes tweet data from the DOM
-4. **Scroll + Extract more** — if fewer than 10 tweets, scroll down and extract again
+1. **Navigate** — `actionbook --extension browser goto "<search-url>"` to the x.com search URL
+2. **Wait** — `sleep 3` then `actionbook --extension browser wait "article[data-testid='tweet']"` until tweets appear
+3. **Extract** — `actionbook --extension browser eval "<JS>"` to run extraction script
+4. **Scroll + Extract more** — if fewer than 10 tweets, scroll and extract again
 
 ### Tweet Extraction Script
 
-Use `browser_run_code` with this Playwright script to extract tweets:
+Use `actionbook --extension browser eval` with this JS to extract tweets:
 
-```javascript
-async (page) => {
-  const extractTweets = () => {
-    const tweets = document.querySelectorAll('article[data-testid="tweet"]');
-    return Array.from(tweets).slice(0, 20).map(t => {
-      // Handle
-      const nameEl = t.querySelector('[data-testid="User-Name"]');
-      const handleLink = nameEl?.querySelector('a[href^="/"][tabindex="-1"]');
-      const handle = handleLink?.getAttribute('href')?.replace('/', '') || null;
-      const displayName = nameEl?.querySelector('a span')?.innerText || null;
-
-      // Text
-      const text = t.querySelector('[data-testid="tweetText"]')?.innerText || '';
-
-      // Timestamp & link
-      const timeEl = t.querySelector('time');
-      const time = timeEl?.getAttribute('datetime') || null;
-      const tweetLink = timeEl?.closest('a')?.getAttribute('href') || null;
-
-      // Engagement: reply, retweet, like counts + views
-      const replyCount = t.querySelector('[data-testid="reply"] span')?.innerText || '0';
-      const retweetCount = t.querySelector('[data-testid="retweet"] span')?.innerText || '0';
-      const likeCount = t.querySelector('[data-testid="like"] span')?.innerText || '0';
-      // Views are in an aria-label on the analytics link
-      const viewsEl = t.querySelector('a[href*="/analytics"]');
-      const viewsLabel = viewsEl?.getAttribute('aria-label') || '';
-      const viewsMatch = viewsLabel.match(/([\d,.]+[KMB]?)\s*view/i);
-      const views = viewsMatch ? viewsMatch[1] : '0';
-
-      return {
-        handle: handle ? '@' + handle : null,
-        display_name: displayName,
-        text: text.substring(0, 200),
-        posted_at: time,
-        url: tweetLink ? 'https://x.com' + tweetLink : null,
-        replies: replyCount,
-        retweets: retweetCount,
-        likes: likeCount,
-        views: views
-      };
-    }).filter(t => t.text && t.handle);
-  };
-
-  // 1. Extract BEFORE scrolling (captures high-engagement first-screen tweets)
-  const initial = await page.evaluate(extractTweets);
-
-  // 2. Scroll down in steps to load more
-  for (let i = 0; i < 3; i++) {
-    await page.evaluate(() => window.scrollBy(0, 1500));
-    await page.waitForTimeout(1500);
-  }
-
-  // 3. Extract again after scrolling
-  const afterScroll = await page.evaluate(extractTweets);
-
-  // 4. Deduplicate by URL
-  const seen = new Set();
-  const all = [];
-  for (const t of [...initial, ...afterScroll]) {
-    if (t.url && !seen.has(t.url)) {
-      seen.add(t.url);
-      all.push(t);
-    }
-  }
-  return all;
-}
+```bash
+actionbook --extension browser eval "
+(function() {
+  var tweets = document.querySelectorAll('article[data-testid=\"tweet\"]');
+  return Array.from(tweets).slice(0, 20).map(function(t) {
+    var nameEl = t.querySelector('[data-testid=\"User-Name\"]');
+    var handleLink = nameEl ? nameEl.querySelector('a[href^=\"/\"][tabindex=\"-1\"]') : null;
+    var handle = handleLink ? handleLink.getAttribute('href').replace('/', '') : null;
+    var displayName = nameEl ? (nameEl.querySelector('a span') || {}).innerText || null : null;
+    var textEl = t.querySelector('[data-testid=\"tweetText\"]');
+    var text = textEl ? textEl.innerText : '';
+    var timeEl = t.querySelector('time');
+    var time = timeEl ? timeEl.getAttribute('datetime') : null;
+    var linkEl = timeEl ? timeEl.closest('a') : null;
+    var tweetLink = linkEl ? linkEl.getAttribute('href') : null;
+    var replyCount = (t.querySelector('[data-testid=\"reply\"] span') || {}).innerText || '0';
+    var retweetCount = (t.querySelector('[data-testid=\"retweet\"] span') || {}).innerText || '0';
+    var likeCount = (t.querySelector('[data-testid=\"like\"] span') || {}).innerText || '0';
+    var viewsEl = t.querySelector('a[href*=\"/analytics\"]');
+    var viewsLabel = viewsEl ? viewsEl.getAttribute('aria-label') || '' : '';
+    var viewsMatch = viewsLabel.match(/([\d,.]+[KMB]?)\s*view/i);
+    var views = viewsMatch ? viewsMatch[1] : '0';
+    return {
+      handle: handle ? '@' + handle : null,
+      display_name: displayName,
+      text: text.substring(0, 200),
+      posted_at: time,
+      url: tweetLink ? 'https://x.com' + tweetLink : null,
+      replies: replyCount, retweets: retweetCount, likes: likeCount, views: views
+    };
+  }).filter(function(t) { return t.text && t.handle; });
+})()
+"
 ```
 
-> **Note**: X's DOM structure may change. If the selectors break, use `browser_snapshot` to read the accessibility tree and extract data manually, or use `browser_take_screenshot` to visually inspect the page and adjust selectors.
+### Scrolling to Load More Tweets
+
+```bash
+# Scroll down 1500px, wait, repeat 3 times
+actionbook --extension browser eval "window.scrollBy(0, 1500)"
+sleep 2
+actionbook --extension browser eval "window.scrollBy(0, 1500)"
+sleep 2
+actionbook --extension browser eval "window.scrollBy(0, 1500)"
+sleep 2
+# Then re-run extraction script above and deduplicate by URL
+```
+
+> **Note**: X's DOM structure may change. If selectors break, use `actionbook --extension browser snapshot` to read the accessibility tree, or `actionbook --extension browser screenshot` to visually inspect and adjust selectors.
 
 ---
 

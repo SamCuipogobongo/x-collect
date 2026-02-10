@@ -1,6 +1,6 @@
 {
   "name": "x-collect-skill",
-  "version": "1.0.2",
+  "version": "2.0.0",
   "description": "X/Twitter topic intelligence skill for Claude Code",
   "keywords": [
     "claude-code",
@@ -8,7 +8,7 @@
     "agent-skill",
     "twitter",
     "x-com",
-    "playwright"
+    "actionbook"
   ],
   "homepage": "https://github.com/SamCuipogobongo/x-collect",
   "repository": {

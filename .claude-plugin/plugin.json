@@ -1,7 +1,7 @@
 {
   "name": "x-collect",
   "version": "1.0.0",
-  "description": "X/Twitter topic intelligence via Playwright browser automation",
+  "description": "X/Twitter topic intelligence via Actionbook browser automation",
   "author": {
     "name": "Sam"
   }

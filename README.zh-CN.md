@@ -18,7 +18,7 @@
 
 [English](./README.md) | 中文
 
-X/Twitter 话题情报采集工具，Claude Code 专用 Skill。通过 Playwright 浏览器自动化直接搜索 x.com，抓取真实推文和互动数据。
+X/Twitter 话题情报采集工具，Claude Code 专用 Skill。通过 Actionbook 浏览器自动化直接搜索 x.com，抓取真实推文和互动数据。
 
 ## 功能
 
@@ -40,13 +40,16 @@ X/Twitter 话题情报采集工具，Claude Code 专用 Skill。通过 Playwrigh
 | 依赖 | 用途 | 必需 |
 |------|------|------|
 | [Claude Code](https://claude.ai/claude-code) | 运行环境 | 是 |
-| [Playwright MCP](https://github.com/microsoft/playwright-mcp) | 浏览器自动化 | 是 |
-| 已登录的 X/Twitter 会话 | 浏览器需已登录 x.com | 是 |
+| [Actionbook CLI](https://actionbook.dev) | 浏览器自动化（`actionbook` 命令） | 是 |
+| Actionbook Chrome 扩展 | 控制用户已有的 Chrome 浏览器 | 是 |
+| 已登录的 X/Twitter 会话 | Chrome 需已登录 x.com | 是 |
 
-### 安装 Playwright MCP
+### 安装 Actionbook 扩展
 
 ```bash
-claude mcp add --scope user playwright -- npx @playwright/mcp@latest
+actionbook extension install           # 安装扩展文件
+# 然后在 Chrome 中加载未打包扩展 (chrome://extensions)
+actionbook extension serve             # 启动桥接（保持运行）
 ```
 
 ## 安装
@@ -130,14 +133,15 @@ cp x-collect/SKILL.md ~/.claude/skills/x-collect/
 
 ## 工作原理
 
-通过 Playwright MCP 浏览器自动化：
-1. 导航到 x.com 搜索页（Top 标签页 + 各种过滤条件）
-2. 等待推文加载
-3. 通过 DOM 查询或无障碍树快照提取推文数据
-4. 按推文 URL 去重
-5. 输出 JSONL + Markdown，附带内容机会分析
+通过 Actionbook Extension 模式浏览器自动化：
+1. 控制用户的 Chrome 浏览器（使用已有的 x.com 登录状态）
+2. 导航到 x.com 搜索页（Top 标签页 + 各种过滤条件）
+3. 等待推文加载
+4. 通过 JavaScript 执行提取推文数据
+5. 按推文 URL 去重
+6. 输出 JSONL + Markdown，附带内容机会分析
 
-无需第三方 API，直接通过 Playwright 浏览器自动化读取 x.com。
+无需第三方 API，直接通过 Actionbook 浏览器自动化读取 x.com。
 
 ## 社区
 

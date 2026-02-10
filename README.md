@@ -18,7 +18,7 @@
 
 English | [中文](./README.zh-CN.md)
 
-X/Twitter topic intelligence skill for Claude Code. Uses Playwright browser automation to search x.com directly, scraping real tweets with engagement metrics.
+X/Twitter topic intelligence skill for Claude Code. Uses Actionbook browser automation to search x.com directly, scraping real tweets with engagement metrics.
 
 ## What it does
 
@@ -40,13 +40,16 @@ Output: JSONL + Markdown in `./x-collect-data/` with real handles, tweet text, l
 | Dependency | Purpose | Required |
 |------------|---------|----------|
 | [Claude Code](https://claude.ai/claude-code) | Runtime | Yes |
-| [Playwright MCP](https://github.com/microsoft/playwright-mcp) | Browser automation | Yes |
-| Logged-in X/Twitter session | Browser must have x.com logged in | Yes |
+| [Actionbook CLI](https://actionbook.dev) | Browser automation (`actionbook` command) | Yes |
+| Actionbook Chrome Extension | Controls user's existing Chrome browser | Yes |
+| Logged-in X/Twitter session | Chrome must have x.com logged in | Yes |
 
-### Install Playwright MCP
+### Setup Actionbook Extension
 
 ```bash
-claude mcp add --scope user playwright -- npx @playwright/mcp@latest
+actionbook extension install           # install extension files
+# Then load unpacked extension in Chrome (chrome://extensions)
+actionbook extension serve             # start bridge (keep running)
 ```
 
 ## Install
@@ -130,14 +133,15 @@ Data saved to `./x-collect-data/`:
 
 ## How it works
 
-The skill uses Playwright MCP to:
-1. Navigate to x.com search pages with Top tab and various filters
-2. Wait for tweets to load
-3. Extract tweet data via DOM queries or accessibility tree snapshot
-4. Deduplicate by tweet URL
-5. Output JSONL + Markdown with Content Opportunity Summary
+The skill uses Actionbook Extension mode to:
+1. Control the user's Chrome browser (with existing x.com login)
+2. Navigate to x.com search pages with Top tab and various filters
+3. Wait for tweets to load
+4. Extract tweet data via JavaScript evaluation
+5. Deduplicate by tweet URL
+6. Output JSONL + Markdown with Content Opportunity Summary
 
-No third-party API needed — reads directly from x.com via Playwright browser automation.
+No third-party API needed — reads directly from x.com via Actionbook browser automation.
 
 ## Community
 
